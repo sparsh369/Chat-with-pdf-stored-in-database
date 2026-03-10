@@ -9,13 +9,11 @@ Run:
 """
 
 import os
-from dotenv import load_dotenv
 import streamlit as st
 import chromadb
 from openai import OpenAI
 
-load_dotenv()  # reads OPENAI_API_KEY from .env
-
+api_key = st.secrets["OPENAI_API_KEY"]
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="Chat with PDF",
