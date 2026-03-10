@@ -13,7 +13,6 @@ import streamlit as st
 import chromadb
 from openai import OpenAI
 
-api_key = st.secrets["OPENAI_API_KEY"]
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="Chat with PDF",
@@ -99,11 +98,12 @@ def load_db():
         return None, []
 
 @st.cache_resource
-def get_openai_client():
-    api_key = os.getenv("OPENAI_API_KEY")
-    if not api_key:
-        return None
-    return OpenAI(api_key=api_key)
+    def get_openai_client():
+        try:
+            api_key = st.secrets["OPENAI_API_KEY"]
+            return OpenAI(api_key=api_key)
+        except KeyError:
+            return None
 
 collection, pdf_sources = load_db()
 client                  = get_openai_client()
