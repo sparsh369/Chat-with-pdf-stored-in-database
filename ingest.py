@@ -12,13 +12,11 @@ vectors to ./chroma_db/  so app.py can use them without re-embedding.
 import os
 import argparse
 from pathlib import Path
-from dotenv import load_dotenv
 import pypdf
 import chromadb
 from chromadb.config import Settings
 from openai import OpenAI
 
-load_dotenv()  # reads OPENAI_API_KEY from .env
 
 # ── Config ────────────────────────────────────────────────────────────────────
 EMBED_MODEL   = "text-embedding-3-small"
@@ -44,9 +42,10 @@ def ingest(pdf_dir: str):
         return
 
     # ── OpenAI client ──────────────────────────────────────────────────────────
-    api_key = os.getenv("OPENAI_API_KEY")
-    if not api_key:
-        raise ValueError("OPENAI_API_KEY not found. Check your .env file.")
+    try:
+        api_key = st.secrets["OPENAI_API_KEY"]
+    except KeyError:
+        raise ValueError("OPENAI_API_KEY not found. Add it in Streamlit Cloud → Settings → Secrets.")
     client = OpenAI(api_key=api_key)
 
     # ── Persistent ChromaDB ────────────────────────────────────────────────────
