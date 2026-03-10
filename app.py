@@ -98,12 +98,12 @@ def load_db():
         return None, []
 
 @st.cache_resource
-    def get_openai_client():
-        try:
-            api_key = st.secrets["OPENAI_API_KEY"]
-            return OpenAI(api_key=api_key)
-        except KeyError:
-            return None
+def get_openai_client():
+    try:
+        api_key = st.secrets["OPENAI_API_KEY"]
+        return OpenAI(api_key=api_key)
+    except KeyError:
+        return None
 
 collection, pdf_sources = load_db()
 client                  = get_openai_client()
